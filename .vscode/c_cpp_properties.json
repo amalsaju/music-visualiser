@@ -45,7 +45,8 @@
             "includePath": [
                 "${workspaceFolder}/build/external/raylib-master/src/**",
                 "${workspaceFolder}/include/**",
-                "${workspaceFolder}/src/**"
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/build/external/raylib-master/examples/others"
             ],
             "defines": [
                 "_DEBUG",
@@ -54,11 +55,10 @@
                 "GRAPHICS_API_OPENGL_33",
                 "PLATFORM_DESKTOP"
             ],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
-
         }
     ],
     "version": 4

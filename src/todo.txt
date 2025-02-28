@@ -1,0 +1,9 @@
+TODO
+----
+- create a repo on github
+- clean up UI
+- fix the buttons
+- Get a windows build
+- Filter patterns not filtering files
+- Implement a default screen without any music
+
