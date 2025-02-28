@@ -135,8 +135,11 @@ void OpenFile()
 
 		while (getline(ss, t, delimiter))
 		{
-			musicFileNames.push_back(t); // the file order is the order in which they appear in the folder ( I guess alphabetical ?)
-			//std::cout << "File selected is: " << t << std::endl;
+			//std::cout << "File Name: " << t << " : " << fs::is_directory(t) << std::endl;
+			if(!fs::is_directory(t)){
+				musicFileNames.push_back(t); // the file order is the order in which they appear in the folder ( I guess alphabetical ?)
+				std::cout << "File selected is: " << t << std::endl;
+			}
 		}
 
 		
