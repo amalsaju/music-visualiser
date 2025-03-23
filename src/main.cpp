@@ -9,8 +9,8 @@
 #include <filesystem>
 
 #include "raylib.h"
-#include "resource_dir.h" 	// utility header for SearchAndSetResourceDir
-#include "reasings.h"		// raylib easing library
+#include "resource_dir.h" // utility header for SearchAndSetResourceDir
+#include "reasings.h"	  // raylib easing library
 
 #include "tinyfiledialogs.h"
 
@@ -19,7 +19,7 @@ namespace fs = std::filesystem;
 // Colours
 
 #define GUNMETAL_DARK \
-	(Color){32, 44, 57, 255} // Gun Metal color dark
+	(Color){255, 255, 255, 255} // Gun Metal color dark
 #define GUNMETAL_LIGHT \
 	(Color){40, 56, 69, 255} // Gun Metal color light
 
@@ -42,7 +42,6 @@ enum PLAY_BUTTONS
 
 const double pi = acos(-1);
 CArray data(256);
-
 
 // FFT code taken from
 // https://www.w3computing.com/articles/how-to-implement-a-fast-fourier-transform-fft-in-cpp/
@@ -135,14 +134,13 @@ void OpenFile()
 
 		while (getline(ss, t, delimiter))
 		{
-			//std::cout << "File Name: " << t << " : " << fs::is_directory(t) << std::endl;
-			if(!fs::is_directory(t)){
+			// std::cout << "File Name: " << t << " : " << fs::is_directory(t) << std::endl;
+			if (!fs::is_directory(t))
+			{
 				musicFileNames.push_back(t); // the file order is the order in which they appear in the folder ( I guess alphabetical ?)
 				std::cout << "File selected is: " << t << std::endl;
 			}
 		}
-
-		
 	}
 }
 
@@ -235,9 +233,11 @@ int main()
 	float timePlayed = 0.0f;
 	float interpolationSpeed = 0.01f;
 
+	int playlistMarginLeft = 40;
+
 	int timeLinePosX = 100;
 	int timeLinePosY = 670;
-	int timeLineLength = 1000;
+	int timeLineLength = SCREEN_WIDTH - 280 - playlistMarginLeft - timeLinePosX;
 	int timeLineHeight = 5;
 
 	Texture2D buttonSpriteSheet = LoadTexture("spritesheet.png");
@@ -246,7 +246,7 @@ int main()
 	int spriteHeight = buttonSpriteSheet.height;
 
 	Rectangle spriteSourceRet = {192, 0, (float)spriteWidth, (float)spriteHeight};
-	Rectangle playBtnDestRec = {SCREEN_WIDTH / 2.0f - 48, 670, spriteWidth, spriteHeight};
+	Rectangle playBtnDestRec = {timeLineLength / 2.0f + timeLinePosX, timeLinePosY, spriteWidth, spriteHeight};
 	Rectangle frBtnDestRec = {playBtnDestRec.x - 96, playBtnDestRec.y, spriteWidth, spriteHeight};
 	Rectangle ffBtnDestRec = {playBtnDestRec.x + 96, playBtnDestRec.y, spriteWidth, spriteHeight};
 	Vector2 origin = {0, 0};
@@ -257,7 +257,6 @@ int main()
 
 	if (!DEBUG)
 	{
-
 		OpenFile();
 		if (musicFileNames[musicIndex] != "NULL")
 		{
@@ -307,11 +306,11 @@ int main()
 	while (!WindowShouldClose()) // run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
 		// change song after current one is finished
-		if((int)GetMusicTimePlayed(music) == (int)GetMusicTimeLength(music))
+		if ((int)GetMusicTimePlayed(music) == (int)GetMusicTimeLength(music))
 		{
 			musicIndex++;
 
-			if(musicIndex >= musicFileNames.size())
+			if (musicIndex >= musicFileNames.size())
 			{
 				musicIndex = 0;
 			}
@@ -406,12 +405,30 @@ int main()
 				DrawRectanglePro(rec[i], barOrigin, 0.0f, (Color){255, 71, i * (250 / noOfRectangles), 255});
 			}
 
-			//Draw the remaining music file names
+			// Draw the remaining music file names
+			DrawRectangle(SCREEN_WIDTH - 250, 0, 250, SCREEN_HEIGHT, GUNMETAL_LIGHT);
+			DrawText("Songs in Playlist", SCREEN_WIDTH - 220, 20, 20, YELLOW);
 
-			for(int i = 0; i < musicFileNames.size(); ++i)
+			for (int i = 0; i < musicFileNames.size(); ++i)
 			{
 				// Draw everything in the list, highlight the current one
-				DrawText(GetMusicName(musicFileNames[i]).c_str(), 1200, 100 + (100 * i), 20, ORANGE);
+				if (IsHovering({SCREEN_WIDTH - 230, (float)100 + (100 * i) - 10, 200, 40}))
+				{
+					DrawRectangle(SCREEN_WIDTH - 230, (float)100 + (100 * i) - 10, 200, 40, WHITE);
+					if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+					{
+						if (IsMusicStreamPlaying(music))
+						{
+							PauseMusicStream(music);
+							StopMusicStream(music);
+							music = LoadMusicStream(musicFileNames[i].c_str());
+							musicIndex = i ;
+							AttachAudioStreamProcessor(music.stream, ProcessAudio);
+							PlayMusicStream(music);
+						}
+					}
+				}
+				DrawText(GetMusicName(musicFileNames[i]).c_str(), SCREEN_WIDTH - 220, 100 + (100 * i), 20, musicIndex == i ? YELLOW : ORANGE);
 			}
 
 			// Draw music details and timeline
