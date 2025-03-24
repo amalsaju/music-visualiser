@@ -263,11 +263,11 @@ int main()
 	{
 		whiteSpecks[i].rec.height = GetRandomValue(1, 4);
 		whiteSpecks[i].rec.width = whiteSpecks[i].rec.height;
-		whiteSpecks[i].rec.x = GetRandomValue(1,SCREEN_WIDTH) ;
+		whiteSpecks[i].rec.x = GetRandomValue(1, SCREEN_WIDTH);
 		whiteSpecks[i].rec.y = GetRandomValue(1, SCREEN_HEIGHT);
 		whiteSpecks[i].moveDirection = Vector2{(float)GetRandomValue(1, 9) / 10, (float)GetRandomValue(1, 9) / 10};
 		whiteSpecks[i].color = (Color){GetRandomValue(200, 255), GetRandomValue(200, 255), GetRandomValue(200, 255), 255};
-		whiteSpecks[i].moveSpeed = GetRandomValue(10, 50); 
+		whiteSpecks[i].moveSpeed = GetRandomValue(10, 50);
 	}
 
 	Vector2 mousePoint;
@@ -438,7 +438,7 @@ int main()
 			{
 				whiteSpecks[i].rec.x += whiteSpecks[i].moveDirection.x * whiteSpecks[i].moveSpeed * GetFrameTime();
 				// DrawCircle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].color);
-				if(whiteSpecks[i].rec.x > 1000)
+				if (whiteSpecks[i].rec.x > 1000)
 				{
 					whiteSpecks[i].rec.x = 0;
 				}
@@ -469,6 +469,24 @@ int main()
 					}
 				}
 				DrawText(GetMusicName(musicFileNames[i]).c_str(), SCREEN_WIDTH - 220, 100 + (100 * i), 20, musicIndex == i ? YELLOW : ORANGE);
+			}
+
+			DrawRectangle(700, 100, 150, 40, GRAY);
+			if (isBarGraph)
+			{
+				DrawText("Box visuals", 710, 110, 20, WHITE);
+			}
+			else
+			{
+				DrawText("Graph visuals", 710, 110, 20, WHITE);
+			}
+
+			if (IsHovering({700, 100, 150, 40}))
+			{
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+				{
+					isBarGraph = !isBarGraph;
+				}
 			}
 
 			// Draw music details and timeline
