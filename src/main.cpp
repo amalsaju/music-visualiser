@@ -16,12 +16,10 @@
 
 namespace fs = std::filesystem;
 
-// Colours
+#define GUNMETAL_DARK (Color){0, 0, 0, 255}		// Gun Metal color dark
+#define GUNMETAL_LIGHT (Color){40, 56, 69, 255} // Gun Metal color light
 
-#define GUNMETAL_DARK \
-	(Color){255, 255, 255, 255} // Gun Metal color dark
-#define GUNMETAL_LIGHT \
-	(Color){40, 56, 69, 255} // Gun Metal color light
+#define GUNMETAL_LIGHT (Color){40, 56, 69, 255} // Gun Metal color light
 
 #define DEBUG 1
 
@@ -251,7 +249,30 @@ int main()
 	Rectangle ffBtnDestRec = {playBtnDestRec.x + 96, playBtnDestRec.y, spriteWidth, spriteHeight};
 	Vector2 origin = {0, 0};
 
+	struct WhiteSpeck
+	{
+		Rectangle rec;
+		Color color;
+		Vector2 moveDirection;
+		float moveSpeed;
+	};
+
+	WhiteSpeck whiteSpecks[100];
+
+	for (int i = 0; i < 100; i++)
+	{
+		whiteSpecks[i].rec.height = GetRandomValue(1, 4);
+		whiteSpecks[i].rec.width = whiteSpecks[i].rec.height;
+		whiteSpecks[i].rec.x = GetRandomValue(1,SCREEN_WIDTH) ;
+		whiteSpecks[i].rec.y = GetRandomValue(1, SCREEN_HEIGHT);
+		whiteSpecks[i].moveDirection = Vector2{(float)GetRandomValue(1, 9) / 10, (float)GetRandomValue(1, 9) / 10};
+		whiteSpecks[i].color = (Color){GetRandomValue(200, 255), GetRandomValue(200, 255), GetRandomValue(200, 255), 255};
+		whiteSpecks[i].moveSpeed = GetRandomValue(10, 50); 
+	}
+
 	Vector2 mousePoint;
+
+	bool isBarGraph = true;
 
 	InitAudioDevice();
 
@@ -398,11 +419,30 @@ int main()
 				rec[i].height = EaseQuadOut((float)frameCounter, 0, value * 1.5, 6);
 				rec[i].height = std::clamp((int)rec[i].height, 0, 300);
 				rec[i].x = 100 + i * rec[i].width;
-				rec[i].y = SCREEN_HEIGHT / 2 - rec[i].height / 2;
-				// rec[i].y = 550 - rec[i].height;
+				if (isBarGraph)
+				{
+
+					rec[i].y = 550 - rec[i].height;
+				}
+				else
+				{
+
+					rec[i].y = SCREEN_HEIGHT / 2 - rec[i].height / 2;
+				}
 
 				Vector2 barOrigin = {0.0f, 0.0f};
 				DrawRectanglePro(rec[i], barOrigin, 0.0f, (Color){255, 71, i * (250 / noOfRectangles), 255});
+			}
+
+			for (int i = 0; i < 100; i++)
+			{
+				whiteSpecks[i].rec.x += whiteSpecks[i].moveDirection.x * whiteSpecks[i].moveSpeed * GetFrameTime();
+				// DrawCircle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].color);
+				if(whiteSpecks[i].rec.x > 1000)
+				{
+					whiteSpecks[i].rec.x = 0;
+				}
+				DrawRectangle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].rec.height, whiteSpecks[i].color);
 			}
 
 			// Draw the remaining music file names
@@ -422,7 +462,7 @@ int main()
 							PauseMusicStream(music);
 							StopMusicStream(music);
 							music = LoadMusicStream(musicFileNames[i].c_str());
-							musicIndex = i ;
+							musicIndex = i;
 							AttachAudioStreamProcessor(music.stream, ProcessAudio);
 							PlayMusicStream(music);
 						}
