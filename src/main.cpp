@@ -404,7 +404,16 @@ int main()
 				}
 				frameCounter = 0;
 			}
-
+			for (int i = 0; i < 100; i++)
+			{
+				whiteSpecks[i].rec.x += whiteSpecks[i].moveDirection.x * whiteSpecks[i].moveSpeed * GetFrameTime();
+				// DrawCircle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].color);
+				if (whiteSpecks[i].rec.x > 1000)
+				{
+					whiteSpecks[i].rec.x = 0;
+				}
+				DrawRectangle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].rec.height, whiteSpecks[i].color);
+			}
 			frameCounter++;
 
 			for (int i = 0; i < noOfRectangles; ++i)
@@ -432,17 +441,6 @@ int main()
 
 				Vector2 barOrigin = {0.0f, 0.0f};
 				DrawRectanglePro(rec[i], barOrigin, 0.0f, (Color){255, 71, i * (250 / noOfRectangles), 255});
-			}
-
-			for (int i = 0; i < 100; i++)
-			{
-				whiteSpecks[i].rec.x += whiteSpecks[i].moveDirection.x * whiteSpecks[i].moveSpeed * GetFrameTime();
-				// DrawCircle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].color);
-				if (whiteSpecks[i].rec.x > 1000)
-				{
-					whiteSpecks[i].rec.x = 0;
-				}
-				DrawRectangle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].rec.height, whiteSpecks[i].color);
 			}
 
 			// Draw the remaining music file names
