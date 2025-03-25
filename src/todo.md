@@ -7,3 +7,7 @@ TODO
 - ~~Filter patterns not filtering directories~~ - ~~filter based on is_directory()~~
 - Implement a default screen without any music
 - Add in a better font
+- add in seek to end and seek to beginning button
+- add a shuffle button in the playlist section
+- add a loop button in the playlist section
+- implement a colour picker

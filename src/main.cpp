@@ -16,6 +16,7 @@
 
 namespace fs = std::filesystem;
 
+// Colours
 #define GUNMETAL_DARK (Color){0, 0, 0, 255}		// Gun Metal color dark
 #define GUNMETAL_LIGHT (Color){40, 56, 69, 255} // Gun Metal color light
 
@@ -228,6 +229,18 @@ int main()
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
 
+
+	Font robotoFont = LoadFontEx("fonts/Roboto.ttf", 32, 0, 250);
+	if (IsFontValid(robotoFont))
+	{
+		printf("Font is valid!");
+	}
+	else
+	{
+		printf("Font is not valid!");
+	}
+	// Font robotoFont= LoadFontEx("resources/fonts/Roboto.ttf", 32, 0, 250);
+
 	float timePlayed = 0.0f;
 	float interpolationSpeed = 0.01f;
 
@@ -407,11 +420,11 @@ int main()
 			for (int i = 0; i < 100; i++)
 			{
 				whiteSpecks[i].rec.x += whiteSpecks[i].moveDirection.x * whiteSpecks[i].moveSpeed * GetFrameTime();
-				// DrawCircle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].color);
 				if (whiteSpecks[i].rec.x > 1000)
 				{
 					whiteSpecks[i].rec.x = 0;
 				}
+				//  DrawCircle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].color);
 				DrawRectangle(whiteSpecks[i].rec.x, whiteSpecks[i].rec.y, whiteSpecks[i].rec.width, whiteSpecks[i].rec.height, whiteSpecks[i].color);
 			}
 			frameCounter++;
@@ -445,7 +458,7 @@ int main()
 
 			// Draw the remaining music file names
 			DrawRectangle(SCREEN_WIDTH - 250, 0, 250, SCREEN_HEIGHT, GUNMETAL_LIGHT);
-			DrawText("Songs in Playlist", SCREEN_WIDTH - 220, 20, 20, YELLOW);
+			DrawTextEx(robotoFont, "Playlist", {SCREEN_WIDTH - 220, 20}, robotoFont.baseSize, 2, YELLOW);
 
 			for (int i = 0; i < musicFileNames.size(); ++i)
 			{
@@ -520,6 +533,7 @@ int main()
 		EndDrawing();
 	}
 
+	UnloadFont(robotoFont);
 	UnloadMusicStream(music);
 
 	UnloadTexture(buttonSpriteSheet);
