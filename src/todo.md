@@ -11,3 +11,4 @@ TODO
 - add a shuffle button in the playlist section
 - add a loop button in the playlist section
 - implement a colour picker
+- !IMPORTANT: Error throwing if you cancel the file picker and don't select anything
