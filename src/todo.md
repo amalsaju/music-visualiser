@@ -11,4 +11,5 @@ TODO
 - add a shuffle button in the playlist section
 - add a loop button in the playlist section
 - implement a colour picker
-- !IMPORTANT: Error throwing if you cancel the file picker and don't select anything
+- ~~!iMPORTANT: Error throwing if you cancel the file picker and don't select anything~~
+- Look into the possibility of a sliding window approach to animate text movement effect for showing song names ( could be my first article as well )
