@@ -2,18 +2,18 @@
 #include <string>
 #include <math.h>
 #include <algorithm>
-#include <bits/stdc++.h>
 #include <complex>
 #include <vector>
 #include <cmath>
 #include <filesystem>
 
 #include "raylib.h"
+// #define RAYGUI_IMPLEMENTATION
+// #include "raygui.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
 #include "reasings.h"	  // raylib easing library
 
 #include "tinyfiledialogs.h"
-
 
 namespace fs = std::filesystem;
 
@@ -89,7 +89,6 @@ void fft()
 	}
 }
 
-
 Music music;
 
 std::vector<std::string> musicFileNames{};
@@ -113,7 +112,7 @@ void OpenFile()
 
 	if (!fileNames)
 	{
-		std:: cout << "File not found!" << std::endl;
+		std::cout << "File not found!" << std::endl;
 
 		tinyfd_messageBox(
 			"Error",
@@ -210,7 +209,6 @@ bool IsHovering(Rectangle collisionArea)
 	}
 }
 
-
 std::string GetMusicName(std::string path)
 {
 	fs::path pathObj(path);
@@ -244,6 +242,8 @@ int main()
 		printf("Font is not valid!");
 	}
 	// Font robotoFont= LoadFontEx("resources/fonts/Roboto.ttf", 32, 0, 250);
+
+	bool showMessageBox = false;
 
 	float timePlayed = 0.0f;
 	float interpolationSpeed = 0.01f;
@@ -408,6 +408,18 @@ int main()
 		// drawing
 		BeginDrawing();
 
+		// if (GuiButton((Rectangle){24, 24, 120, 30}, "#191#Show Message"))
+		// 	showMessageBox = true;
+
+		// if (showMessageBox)
+		// {
+		// 	int result = GuiMessageBox((Rectangle){85, 70, 250, 100},
+		// 							   "#191#Message Box", "Hi! This is a message!", "Nice;Cool");
+
+		// 	if (result >= 0)
+		// 		showMessageBox = false;
+		// }
+
 		if (IsMusicStreamPlaying(music))
 		{
 
@@ -487,22 +499,41 @@ int main()
 				// DrawTextEx(robotoFont, GetMusicName((musicFileNames[i])).c_str(), {SCREEN_WIDTH - 220, (float)100 + (100 * i)}, robotoFont.baseSize / 1.5, 1, musicIndex == i ? YELLOW : ORANGE);
 			}
 
-			DrawRectangle(700, 100, 150, 40, GRAY);
-			if (isBarGraph)
-			{
-				DrawText("Box visuals", 710, 110, 20, WHITE);
-			}
-			else
-			{
-				DrawText("Graph visuals", 710, 110, 20, WHITE);
-			}
-
-			if (IsHovering({700, 100, 150, 40}))
+			if (IsHovering({55, 50, 150, 40}))
 			{
 				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 				{
 					isBarGraph = !isBarGraph;
 				}
+				// cyan background
+				DrawRectangle(55, 50, 170, 40, (Color){67, 255, 175, 255});
+
+				std::string text = "";
+				if (isBarGraph)
+				{
+					text = "Box visuals";
+				}
+				else
+				{
+					text = "Graph visuals";
+				}
+				// Dark Blue text
+				DrawText(text.c_str(), 65, 60, 20, (Color){38, 42, 51, 255});
+			}
+			else
+			{
+				// Dark blue background
+				DrawRectangle(55, 50, 170, 40, (Color){38, 42, 51, 255});
+				std::string text = "";
+				if (isBarGraph)
+				{
+					text = "Box visuals";
+				}
+				else
+				{
+					text = "Graph visuals";
+				}
+				DrawText(text.c_str(), 65, 60, 20, (Color){229, 247, 239, 255});
 			}
 
 			// Draw music details and timeline
