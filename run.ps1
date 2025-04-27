@@ -1,0 +1,1 @@
+g++ src/main.cpp src/tinyfiledialogs.cpp -o game.exe -O1 -Wall -Wno-missing-braces -I include/ -L lib/ -lraylib -lole32 -lcomdlg32 -lopengl32 -lgdi32 -lwinmm
